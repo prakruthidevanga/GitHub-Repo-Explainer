@@ -1,156 +1,193 @@
-# 🧠 CodeLens AI — Local GitHub Repository Code Explainer
+# 🔍 CodeLens AI — Local GitHub Repository Intelligence
 
-A professional local GenAI mini-project that accepts a public GitHub repository URL, clones it with GitPython, inventories the repository, extracts implementation code (including Jupyter notebook code cells), and asks a locally running Ollama model to generate a detailed repository briefing.
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:1E293B,50:0F766E,100:14B8A6&height=220&section=header&text=CodeLens%20AI&fontSize=50&fontColor=ffffff&animation=fadeIn&desc=Local%20GenAI%20Repository%20Intelligence%20%26%20AST%20Codebase%20Explainer&descSize=15&descAlignY=68" width="100%" alt="CodeLens AI Deep Teal Waving Banner"/>
+</p>
 
-## What the app produces
+<p align="center">
+  A local generative AI developer tool that clones public GitHub repositories, analyzes dependency graphs, parses Python abstract syntax trees (ASTs) and Jupyter notebook code cells, and generates comprehensive technical briefings using local LLMs (via Ollama).
+</p>
 
-The local LLM generates:
+<p align="center">
+  <a href="https://github.com/prakruthidevanga/GitHub-Repo-Explainer">
+    <img src="https://img.shields.io/badge/💻_Codebase-GitHub_Repository-1F2937?style=for-the-badge&logo=github&logoColor=white" alt="Source Code"/>
+  </a>
+</p>
 
-- A natural **1–2 minute presentation script** (about 220–280 words)
-- Project overview and purpose
-- Main technologies and libraries
-- Architecture and end-to-end execution flow
-- Data / control flow
-- Important files and code roles
-- Key features
-- Models, algorithms and logic
-- Inputs, outputs and interfaces
-- Dependencies and configuration
-- Limitations and future improvements
+<p align="center">
+  <img src="https://img.shields.io/badge/Framework-FastAPI%20%2B%20Streamlit-0F766E?style=flat-square" alt="FastAPI + Streamlit"/>
+  <img src="https://img.shields.io/badge/Code%20Analysis-GitPython%20%26%20AST-0D9488?style=flat-square" alt="GitPython"/>
+  <img src="https://img.shields.io/badge/Local%20LLM-Ollama%20(Llama%203%20%2F%20Mistral)-14B8A6?style=flat-square" alt="Local LLM"/>
+  <img src="https://img.shields.io/badge/Privacy-100%25%20On--Premise-1E293B?style=flat-square" alt="Privacy"/>
+</p>
 
-The explanation is **generated from repository evidence**, not hard-coded.
+---
 
-## Important coverage design
+## 📌 Table of Contents
 
-The app keeps a repository-wide file inventory so the model knows which supported files exist. It prioritizes actual implementation files and notebook code cells over README content. For large repositories, it sends controlled implementation excerpts plus the inventory and documentation excerpt. The report explicitly distinguishes files inspected in detail from files that were only inventoried.
+- [📖 Project Overview](#-project-overview)
+- [🎯 Objectives](#-objectives)
+- [✨ Key Features](#-key-features)
+- [🏗️ Code Processing Pipeline](#️-code-processing-pipeline)
+- [🛠️ Technology Stack](#️-technology-stack)
+- [📁 Repository Structure](#-repository-structure)
+- [⚙️ Installation and Setup](#️-installation-and-setup)
+- [🔮 Future Enhancements](#-future-enhancements)
+- [🤝 Contributing](#-contributing)
+- [👩‍💻 Author & Accreditations](#-author--accreditations)
 
-A model cannot literally read an arbitrarily large repository in one prompt; therefore "complete coverage" is handled honestly through inventory + prioritized code inspection rather than pretending unseen code was analyzed.
+---
 
-## Recommended local model
+## 📖 Project Overview
 
-Fast default:
+Developers and open-source contributors spend significant time familiarizing themselves with unfamiliar codebases. Documentation is often sparse, outdated, or absent, and feeding entire multi-file repositories into cloud-hosted AI APIs quickly exceeds token context windows and risks leaking proprietary code to third parties.
+
+**CodeLens AI (GitHub-Repo-Explainer)** solves this developer bottleneck. It clones any public GitHub repository into a sandboxed local workspace, conducts modular file-tree indexing, extracts code symbols and abstract syntax trees (ASTs), parses Jupyter notebook cells, and applies smart token budgeting to formulate context-aware prompts for local LLMs via **Ollama**.
+
+🔍 **Core Mission:** Deliver instant, private, on-premise architectural briefings for any GitHub repository without cloud API subscriptions.
+
+---
+
+## 🎯 Objectives
+
+- 📥 **Automated Sandboxed Cloning:** Seamlessly clone and inventory any public repository URL using GitPython.
+- 🌳 **Abstract Syntax Tree (AST) Parsing:** Extract top-level classes, functions, and import dependencies to understand code structure.
+- 📓 **Jupyter Notebook Extraction:** Parse `.ipynb` JSON trees to extract executable code cells alongside standard `.py` files.
+- ⚖️ **Token Context Budgeting:** Intelligently prioritize and compress code snippets to fit within model context windows without overflow.
+- 🔒 **100% Air-Gapped Privacy:** Execute all AI inferences through local Ollama instances with zero telemetry or data transmission.
+
+---
+
+## ✨ Key Features
+
+### 📦 1. Repository Ingestion & Tree Inspection
+Extracts clean, filtered directory trees while ignoring generated build artifacts (`node_modules`, `__pycache__`, `.venv`, `.git`).
+
+### 🧩 2. AST Code Distillation
+Analyzes function signatures, docstrings, and module dependency chains without cluttering the prompt with boilerplate syntax.
+
+### 🧠 3. Multi-Section Architecture Briefing
+Generates structured developer reports containing:
+- **Executive Summary:** Core application purpose and target problem.
+- **Technology Stack:** Detected languages, libraries, and frameworks.
+- **Entry Points & Execution:** Primary entry scripts and startup instructions.
+- **Key Modules & Responsibilities:** Breakdown of main classes and functions.
+
+---
+
+## 🏗️ Code Processing Pipeline
+
+```mermaid
+flowchart TD
+    A["Public GitHub URL"] --> B["GitPython (Local Shallow Clone)"]
+    B --> C["File Inventory & Filter Engine"]
+    C --> D["AST Parser & Notebook Cell Extractor"]
+    D --> E["Token Budgeter & Code Chunk Optimizer"]
+    E --> F["Prompt Synthesizer"]
+    F --> G["Local LLM Inference Engine (Ollama)"]
+    G --> H["Streamlit Technical Briefing Dashboard"]
+```
+
+---
+
+## 🛠️ Technology Stack
+
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=python,fastapi,git,github,vscode&theme=dark" alt="CodeLens Tech Stack"/>
+</p>
+
+| Component | Technology | Implementation Details |
+| :--- | :--- | :--- |
+| **Language & Environment** | Python 3.10+ | Core application runtime and type annotations |
+| **Code Inspection** | GitPython, AST | Shallow repository cloning and syntax tree traversal |
+| **Notebook Parsing** | JSON / nbformat | Code cell extraction from Jupyter notebooks |
+| **AI Inference** | Ollama (Llama 3 / Mistral) | On-premise language model execution |
+| **Web Presentation** | Streamlit & FastAPI | Interactive developer dashboard and REST endpoints |
+
+---
+
+## 📁 Repository Structure
 
 ```text
-qwen2.5:1.5b
+GitHub-Repo-Explainer/
+├── core/
+│   ├── repo_processor.py        # Cloning, filtering, and AST parsing
+│   ├── llm.py                   # Local Ollama client connector
+│   └── cloud_llm.py             # Optional fallback client
+├── app.py                       # Streamlit interactive user interface
+├── backend/
+│   └── main.py                  # FastAPI companion REST service
+├── requirements.txt             # Python dependency manifest
+└── README.md                    # Project documentation
 ```
 
-Richer (if your machine can handle it):
+---
 
+## ⚙️ Installation and Setup
+
+### Prerequisites
+- Python 3.10+
+- Git installed on PATH
+- [Ollama](https://ollama.ai/) installed with `llama3` or `mistral` pulled
+
+### Step 1: Clone Repository
 ```bash
-ollama pull qwen2.5:3b
+git clone https://github.com/prakruthidevanga/GitHub-Repo-Explainer.git
+cd GitHub-Repo-Explainer
 ```
 
-Then select `qwen2.5:3b` in the sidebar.
-
-## Run locally
-
-1. Install Ollama.
-2. Make sure Ollama is already running. If Ollama Desktop is running, do **not** start a second `ollama serve` process.
-3. Pull the model:
-
+### Step 2: Set Up Virtual Environment
 ```bash
-ollama pull qwen2.5:1.5b
-```
-
-4. Install Python dependencies:
-
-```bash
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 ```
 
-5. Start Streamlit:
+### Step 3: Run Ollama
+```bash
+ollama run llama3
+```
 
+### Step 4: Launch CodeLens AI
 ```bash
 streamlit run app.py
 ```
+*Open `http://localhost:8501`, enter any public GitHub URL, and generate your briefing!*
 
-6. Keep the Ollama URL as:
+---
 
-```text
-http://localhost:11434
-```
+## 🔮 Future Enhancements
 
-## Test repository
+- 📊 **Call Graph Visualization:** Generate interactive dependency graphs showing cross-module function calls.
+- 🧪 **Automated Test Scaffolding:** Suggest unit test cases based on parsed function signatures.
+- 📦 **Multi-Language Expansion:** Add treesitter support for JavaScript, TypeScript, Go, and Java.
 
-```text
-https://github.com/prakruthidevanga/MoodPlus-NLP
-```
+---
 
-For this notebook-heavy project, the analyzer extracts the notebook's actual code cells instead of treating the README as the implementation.
+## 🤝 Contributing
 
-## Architecture
+Contributions are welcomed! Feel free to open an issue or submit a pull request with new AST extractors.
 
-```text
-GitHub URL
-   ↓
-GitPython clone
-   ↓
-Repository inventory + source prioritization
-   ↓
-Notebook code-cell extraction / file excerpts
-   ↓
-FastAPI
-   ↓
-Ollama local LLM
-   ↓
-Structured repository report
-   ↓
-Streamlit professional UI
-```
+---
 
-## Speed optimization
+## 👩‍💻 Author & Accreditations
 
-The app uses one focused generation request for the complete report instead of repeatedly sending the entire repository context for separate sections. Streamlit also caches completed analyses for 30 minutes, so analyzing the same repository/model again is much faster. Streamlit's official documentation recommends caching expensive data/API work with `st.cache_data`. citeturn0search0turn0search1
+**Prakruthi B R**  
+*BCA Student specializing in Artificial Intelligence & Machine Learning*  
+*Alliance University, Bengaluru (CGPA: 9.60)*  
+*GeeksforGeeks Campus Mantri (2026)*
 
-## Streamlit Cloud
+- 💻 **GitHub:** [@prakruthidevanga](https://github.com/prakruthidevanga)
+- 🔗 **LinkedIn:** [Prakruthi BR](https://linkedin.com/in/prakruthi-br)
+- 🌐 **Portfolio:** [prakruthidevanga.github.io](https://prakruthidevanga.github.io/)
+- 📬 **Email:** [prakruthibr2006@gmail.com](mailto:prakruthibr2006@gmail.com)
 
-The UI can be deployed to Streamlit Community Cloud, but `http://localhost:11434` refers to the Streamlit server itself, not your laptop. A fully local assignment demonstration should run Streamlit and Ollama on the same laptop. A public deployment needs an Ollama-compatible inference service reachable from that deployment; do not expose an unsecured Ollama server to the public internet.
+---
 
-## Requirements checklist
+<p align="center">
+  <b>🔍 Accelerating code comprehension through intelligent local AI.</b>
+</p>
 
-- [x] Python
-- [x] GitPython
-- [x] Hugging Face not required for Ollama inference; local open-source model is served by Ollama
-- [x] FastAPI
-- [x] Pydantic
-- [x] Uvicorn
-- [x] Streamlit
-- [x] GitHub URL input
-- [x] Repository cloning
-- [x] Source/configuration detection
-- [x] Jupyter notebook code extraction
-- [x] Local LLM-generated explanation
-- [x] Beginner-friendly 1–2 minute script
-- [x] Detailed technical report
-- [x] Professional modern UI
-- [x] Large-repository coverage inventory
-- [x] Downloadable generated report
-
-## Streamlit Community Cloud deployment
-
-The project supports two modes from the sidebar:
-
-- **Streamlit Cloud — Hugging Face:** intended for public deployment. It clones the public GitHub repository in the Streamlit runtime and sends the prepared repository context to Hugging Face Inference Providers through the OpenAI-compatible chat-completions endpoint.
-- **Local — Ollama:** intended for the original local-LLM assignment/demo. It uses Ollama running on the user's computer.
-
-### Deploy to Streamlit Community Cloud
-
-1. Create a GitHub repository containing the contents of this `final_release` folder.
-2. In Streamlit Community Cloud, create a new app and select `app.py` as the main file.
-3. Deploy the app.
-4. Open the app's **Settings → Secrets** and add:
-
-```toml
-HF_TOKEN = "hf_your_fine_grained_token"
-HF_MODEL = "automatic live-model/provider discovery"
-```
-
-The token must have Hugging Face **Inference Providers** permission. Never commit the token to GitHub.
-
-5. Keep the sidebar in **Streamlit Cloud — Hugging Face** mode and paste a public GitHub repository URL.
-
-Hugging Face documents the OpenAI-compatible endpoint at `https://router.huggingface.co/v1/chat/completions` and automatic `:fastest` provider routing. The cloud mode uses that endpoint directly with `requests`.
-
-### Important deployment note
-
-The cloud mode does **not** try to access `localhost:11434`. That address would refer to the Streamlit Cloud runtime itself, not the user's laptop. Ollama therefore remains available only through the Local — Ollama mode.
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:1E293B,50:0F766E,100:14B8A6&height=110&section=footer" width="100%" alt="CodeLens Footer"/>
+</p>
